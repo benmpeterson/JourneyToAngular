@@ -73,7 +73,7 @@
 
         function deleteClick(id) {
             if (confirm("Delete this Product?")) {
-
+                deleteData(id);
             }
         }
 
@@ -127,6 +127,23 @@
             }, function (error) {
                 handleException(error);
             });
+        }
+
+        function deleteData(id) {
+            dataService.delete(
+                "/api/Product/" + id)
+                .then(function (result){
+                //Get index of this product
+                var index = vm.products.map(function (p)
+                { return p.ProductId; }).indexOf(id);
+
+                //Remove product from array
+                vm.products.splice(index, 1);
+
+                setUIState(pageMode.LIST);
+            }, function (error) {
+                handleException(error);
+                });
         }
 
         function validateData() {

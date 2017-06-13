@@ -128,9 +128,28 @@ namespace PTC.Controllers_Api
 
 
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+        [HttpDelete()]
+        public IHttpActionResult Delete(int id)
         {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            //Get the product
+            vm.Entity = vm.Get(id);
+            //Was it found?
+            if (vm.Entity.ProductId > 0)
+            {
+                //Delete the product
+                vm.Delete(id);
+
+                ret = Ok(true);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
         }
     }
 }
