@@ -9,18 +9,9 @@
          ng-controller="ProductController as vm">
 
         <span>{{vm.product.ProductName}}</span>
-        
-        <!-- ** BEGIN HIDDEN FIELDS AREA ** -->
-        @Html.HiddenFor(m => m.EventCommand)
-        @Html.HiddenFor(m => m.EventArgument)
-        @Html.HiddenFor(m => m.PageMode)
-        @Html.HiddenFor(m => m.Entity.ProductId)
-        
-        <!-- ** END HIDDEN FIELDS AREA ** -->
-        @if (!Model.IsValid)
-        {
+
         <!-- ** BEGIN MESSAGE AREA ** -->
-        <div class="row">
+        <div ng-hide="vm.uiState.isValid" class="row">
             <div class="col-xs-12">
                 <div class="alert alert-danger
                     alert-dismissable"
@@ -37,11 +28,11 @@
             </div>
         </div>
         <!-- ** END MESSAGE AREA ** -->
-        }
 
-        @if (Model.IsSearchAreaVisible) {
+
+      
         <!-- ** BEGIN SEARCH AREA ** -->
-        <div class="panel panel-primary">
+        <div ng-show="vm.uiState.isSearchAreaVisible" class="panel panel-primary">
             <div class="panel-heading">
                 <h1 class="panel-title">Search for Products</h1>
             </div>
@@ -73,20 +64,18 @@
                     <i class="glyphicon glyphicon-share-alt"></i>
                     &nbsp;Reset
                 </button>
-                <button formnovalidate="formnovalidate"
+                <button type="button"
                         class="btn btn-sm btn-success"
-                        data-pdsa-action="add">
+                        ng-click="vm.addClick">
                     <i class="glyphicon glyphicon-plus"></i>
                     &nbsp;Add
                 </button>
             </div>
         </div>
         <!-- ** END SEARCH AREA ** -->
-        }
 
-        @if (Model.IsDetailAreaVisible) {
         <!-- ** BEGIN DETAIL AREA ** -->
-        <div class="panel panel-primary">
+        <div ng-show="vm.uiState.isDetailAreaVisible" class="panel panel-primary">
             <div class="panel-heading">
                 <h1 class="panel-title">
                     Product Information
@@ -120,13 +109,14 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <button class="btn btn-sm btn-primary"
-                                data-pdsa-action="save">
+                                type="button"
+                                ng-click="vm.saveClick()">
                             <i class="glyphicon glyphicon-floppy-disk"></i>
                             &nbsp;Save
                         </button>
                         <button class="btn btn-sm btn-primary"
-                                formnovalidate="formnovalidate"
-                                data-pdsa-action="cancel">
+                                type="button"
+                                ng-click="vm.cancelClick()">
                             <i class="glyphicon glyphicon-remove-circle"></i>
                             &nbsp;Cancel
                         </button>
@@ -135,11 +125,9 @@
             </div>
         </div>
         <!-- ** END DETAIL AREA ** -->
-        }
 
-        @if (Model.IsListAreaVisible) {
         <!-- ** BEGIN LIST AREA ** -->
-        <div class="table-responsive">
+        <div ng-show="vm.uiState.isListAreaVisible" class="table-responsive">
             <table id="productTable"
                    class="table table-condensed table-bordered table-striped table-hover">
                 <thead>
@@ -162,7 +150,8 @@
                     
                         <tr ng-repeat="product in vm.products | filter: vm.searchImmediate">
                             <td class="pdsa-action-button-column">
-                                <a href="#"                                    
+                                <a href="#" 
+                                   ng-click="vm.editClick(product.ProductId)"
                                    class="btn btn-default btn-sm">
                                     <i class="glyphicon glyphicon-edit"></i>
                                 </a>
@@ -173,7 +162,7 @@
                             <td>{{product.Price | currency: '$'}}</td>
                             <td class="pdsa-action-button-column">
                                 <a href="#" 
-                                   onclick="return confirm('Delete this Product?');"
+                                   ng-click="vm.deleteClick(product.ProductId)"                                   
                                    class="btn btn-default btn-sm">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
@@ -185,7 +174,7 @@
             </table>
         </div>
         <!-- ** END LIST AREA ** -->
-        }
+        
     </div>
 }
 
@@ -194,27 +183,4 @@
 <script src="~/Scripts/angular.min.js"></script>
 <script src="~/app/app.module.js"></script>
 <script src="~/app/product.controller.js"></script>
-
-
-  <script>
-    $(document).ready(function () {
-      // Hook events on buttons and anchors
-      buildClickEvents();
-    });
-
-    // Hook events on buttons and anchors
-    function buildClickEvents() {
-      $("[data-pdsa-action]").on("click", function (e) {
-        e.preventDefault();
-
-        $("#EventCommand").val(
-          $(this).data("pdsa-action"));
-
-        $("#EventArgument").val(
-          $(this).attr("data-pdsa-val"));
-
-        $("form").submit();
-      });
-    }
-  </script>
 }
