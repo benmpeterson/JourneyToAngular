@@ -26,13 +26,10 @@ namespace PTC.Controllers_Api
             {
                 ret = NotFound();
             }
-
-
             return ret;
-
-
-
         }
+
+  
 
         // GET api/<controller>/5
         public string Get(int id)

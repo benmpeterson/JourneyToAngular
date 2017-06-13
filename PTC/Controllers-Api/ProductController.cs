@@ -28,6 +28,29 @@ namespace PTC.Controllers_Api
             return ret;
         }
 
+        [HttpPost()]
+        [Route("api/Product/Search")]
+
+        public IHttpActionResult Search(ProductSearch searchEntity)
+        {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            //Search for Products
+            vm.SearchEntity = searchEntity;
+            vm.Search();
+            if (vm.Products.Count > 0)
+            {
+                ret = Ok(vm.Products);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
         // GET api/<controller>/5
         public string Get(int id)
         {

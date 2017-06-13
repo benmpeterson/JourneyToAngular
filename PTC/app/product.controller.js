@@ -10,7 +10,7 @@
         //hook up public events
         vm.resetSearch = resetSearch;
         vm.searchImmediate = searchImmediate;
-
+        vm.search = search;
 
         vm.products = [];
         vm.product = {
@@ -43,6 +43,25 @@
             };
 
             productList();
+        }
+
+        function search() {
+            //create object literal for search values
+            var searchEntity = {
+                CategoryId:
+                vm.searchInput.selectedCategory.CategoryId,
+                ProductName:
+                vm.searchInput.productName
+            };
+
+            //Cal Web API to get a list of Products
+            dataService.post("/api/Product/Search",
+                searchEntity)
+                .then(function (result) {
+                    vm.products = result.data;
+                }, function (error) {
+                    handleException(error);
+                });
         }
 
         function searchImmediate(item) {
