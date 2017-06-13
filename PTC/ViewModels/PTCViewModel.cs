@@ -55,7 +55,10 @@ namespace PTC
 
     #region HandleRequest Method
     public void HandleRequest() {
-      LoadSearchCategories();
+
+      //this is now handled client side
+      //LoadSearchCategories();
+
       LoadCategories();
 
       switch (EventCommand.ToLower()) {

@@ -58,3 +58,9 @@ C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\Newtonsoft.Json.xml
 C:\Users\Ben\dev\JourneyToAngularJS\PTC\obj\Debug\PTC.csprojResolveAssemblyReference.cache
 C:\Users\Ben\dev\JourneyToAngularJS\PTC\obj\Debug\PTC.dll
 C:\Users\Ben\dev\JourneyToAngularJS\PTC\obj\Debug\PTC.pdb
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Net.Http.Formatting.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Http.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Http.WebHost.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Net.Http.Formatting.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Http.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Http.WebHost.xml
