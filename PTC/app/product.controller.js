@@ -158,6 +158,47 @@
         function handleException(error) {
             alert(error.data.ExceptionMessage)
         }
+
+        function handleException(error) {
+            vm.uiState.isValid = false;
+            var msg = {
+                property: 'Error',
+                message: ''
+            };
+
+            vm.uiState.messages = [];
+
+            switch (error.status) {
+                case 400:
+                    break;
+
+                case 404:
+                    msg.message = 'The product you were ' +
+                        'requesting could not be found';
+
+                    vm.uiState.messages.push(msg);
+
+                    break;
+
+                case 500:
+                    msg.message =
+                        error.data.ExceptionMessage;
+                    vm.uiState.messages.push(msg);
+
+                    break
+
+                default:
+                    msg.message = 'Status: ' +
+                        error.status +
+                        ' - Error Message: ' +
+                        error.statusText;
+
+                    vm.uiState.messages.push(msg);
+
+                    break;
+
+            }
+        }
     }
 
 })();
