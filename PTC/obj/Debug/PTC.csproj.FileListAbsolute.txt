@@ -28,3 +28,33 @@ C:\Users\Ben\Downloads\JourneyFromMVC-Angular-Sample (1)\demo\PTC\bin\Newtonsoft
 C:\Users\Ben\Downloads\JourneyFromMVC-Angular-Sample (1)\demo\PTC\obj\Debug\PTC.csprojResolveAssemblyReference.cache
 C:\Users\Ben\Downloads\JourneyFromMVC-Angular-Sample (1)\demo\PTC\obj\Debug\PTC.dll
 C:\Users\Ben\Downloads\JourneyFromMVC-Angular-Sample (1)\demo\PTC\obj\Debug\PTC.pdb
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\PTC.dll.config
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\PTC.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\PTC.pdb
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\Antlr3.Runtime.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\EntityFramework.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\EntityFramework.SqlServer.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\Newtonsoft.Json.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Helpers.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Mvc.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Optimization.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Razor.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.WebPages.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.WebPages.Razor.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\WebGrease.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\EntityFramework.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\EntityFramework.SqlServer.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Helpers.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Mvc.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Optimization.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.Razor.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.WebPages.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\System.Web.WebPages.Razor.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\Antlr3.Runtime.pdb
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\bin\Newtonsoft.Json.xml
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\obj\Debug\PTC.csprojResolveAssemblyReference.cache
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\obj\Debug\PTC.dll
+C:\Users\Ben\dev\JourneyToAngularJS\PTC\obj\Debug\PTC.pdb
