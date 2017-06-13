@@ -17,6 +17,8 @@
         vm.deleteClick = deleteClick;
         vm.saveClick = saveClick;
 
+        vm.product = {};
+        vm.categories = [];
         vm.products = [];
         vm.product = {
             ProductId: 1,
@@ -52,8 +54,11 @@
 
         productList();
         searchCategoriesList();
+        categoryList();
 
         function addClick() {
+            vm.product = initEntity();
+            debugger
             setUIState(pageMode.ADD)
         }
 
@@ -62,6 +67,7 @@
         }
 
         function editClick(id) {
+            productGet(id)
             setUIState(pageMode.EDIT)
         }
 
@@ -72,8 +78,94 @@
         }
 
         function saveClick() {
-            setUIState(pageMode.LIST);
+            if (validateData()) {
+                if (vm.uiState.mode == pageMode.ADD) {
+                    insertData();
+                }
+
+                else {
+                    updateData();
+                }
+            }
         }
+
+        function insertData() {
+            dataService.post(
+                "/api/Product",
+                vm.product)
+                .then(function (result) {
+                    //update product object
+                    vm.product = result.data;
+
+                    //Add Product to Array so new prodect will be see in list mode
+                    vm.products.push(vm.product);
+
+                    setUIState(pageMode.LIST);
+                }, function (error) {
+                    handleException(error);
+                });
+        }
+
+        function updateData() {
+            dataService.put("/api/Product/" +
+                vm.product.ProductId,
+                vm.product)
+            .then(function (result){
+                //Update product object
+                vm.product = result.data;
+
+                //Get index of this product
+                var index = vm.products.map(function (p) {
+                    return p.ProductId;
+                })
+                    .indexOf(vm.product.ProductId);
+
+                //update product in array
+                vm.products[index] = vm.product;
+
+                setUIState(pageMode.LIST);
+            }, function (error) {
+                handleException(error);
+            });
+        }
+
+        function validateData() {
+            var ret = true;
+
+            //Fix up date (IE 11 bug workaround)
+            vm.product.IntroductionDate =
+                vm.product.IntroductionDate.
+                    replace(/\u200E/g, '');
+
+            return ret;
+        }
+
+
+        function productGet(id) {
+            //Call Web API to get a product
+            dataService.get("/api/Product/" + id)
+                .then(function (result) {
+                    //Display product
+                    vm.product = result.data;
+
+                    //Convert data to local date/time format 
+                    if (vm.product.IntroductionDate != null) {
+                        vm.product.IntroductionDate =
+                            new Date(vm.product.IntroductionDate).
+                                toLocaleDateString();
+                    }
+                }, function (error) {
+                    handleException(error);
+                });
+        }
+
+        function categoryList() {
+            dataService.get("/api/Category")
+                .then(function (result) {
+                    vm.categories = result.data;
+                });
+        }
+
 
 
         function setUIState(state) {
@@ -94,6 +186,20 @@
             };
 
             productList();
+        }
+
+        function initEntity() {
+            return {
+                ProductId: 0,
+                ProductName: '',
+                IntroductionDate: new Date().toLocaleDateString(),
+                Url: 'http://benmpeterson.github.io',
+                Price: 0,
+                Category: {
+                    CategoryId: 1,
+                    CategoryName: ''
+                }
+            };
         }
 
         function search() {

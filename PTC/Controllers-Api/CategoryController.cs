@@ -29,7 +29,26 @@ namespace PTC.Controllers_Api
             return ret;
         }
 
-  
+        [HttpGet]        
+        public IHttpActionResult Get()
+        {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            vm.LoadCategories();
+            if (vm.Categories.Count > 0)
+            {
+                ret = Ok(vm.Categories);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+            return ret;
+        }
+
+
+
 
         // GET api/<controller>/5
         public string Get(int id)

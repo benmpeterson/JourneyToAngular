@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PTC.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,8 +18,7 @@ namespace PTC.Controllers_Api
 
             //throw new ApplicationException("Error in the Get() method");
 
-            vm.Get();
-            vm.Products.Clear();
+            vm.Get();            
             if(vm.Products.Count > 0)
             {
                 ret = Ok(vm.Products);
@@ -55,20 +55,78 @@ namespace PTC.Controllers_Api
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        [HttpGet()]
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            IHttpActionResult ret;
+            Product prod = new Product();
+            PTCViewModel vm = new PTCViewModel();
+
+            prod = vm.Get(id);
+            if (prod != null)
+            {
+                ret = Ok(prod);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
+
         }
 
         // POST api/<controller>
-        public void Post([FromBody]string value)
+        [HttpPost()]
+
+        public IHttpActionResult Post(Product product)
         {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            vm.Entity = product;
+            vm.PageMode = PageConstants.ADD;
+            vm.Save();
+
+            if (vm.IsValid)
+            {
+                ret = Created<Product>(
+                    Request.RequestUri +
+                    product.ProductId.ToString(),
+                    product);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut()]
+        public IHttpActionResult Put(int id, Product product)
         {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            vm.Entity = product;
+            vm.PageMode = PageConstants.EDIT;
+            vm.Save();
+
+            if (vm.IsValid)
+            {
+                ret = Ok(product);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
         }
+
+
 
         // DELETE api/<controller>/5
         public void Delete(int id)
