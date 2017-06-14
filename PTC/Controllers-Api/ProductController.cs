@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 
 namespace PTC.Controllers_Api
 {
@@ -76,6 +77,21 @@ namespace PTC.Controllers_Api
 
         }
 
+        //Converts MVC Model State to Web Api Model State
+        private ModelStateDictionary ConvertToModelState(System.Web.Mvc.ModelStateDictionary state)
+        {
+            ModelStateDictionary ret = new ModelStateDictionary();
+
+            foreach (var list in state.ToList())
+            {
+                for (int i = 0; i < list.Value.Errors.Count; i++)
+                {
+                    ret.AddModelError(list.Key, list.Value.Errors[i].ErrorMessage);
+                }
+            }
+            return ret;
+        }
+
         // POST api/<controller>
         [HttpPost()]
 
@@ -94,6 +110,10 @@ namespace PTC.Controllers_Api
                     Request.RequestUri +
                     product.ProductId.ToString(),
                     product);
+            }
+            else if (vm.Messages.Count > 0)
+            {
+                ret = BadRequest(ConvertToModelState(vm.Messages));
             }
             else
             {
@@ -117,6 +137,10 @@ namespace PTC.Controllers_Api
             if (vm.IsValid)
             {
                 ret = Ok(product);
+            }
+            else if (vm.Messages.Count > 0)
+            {
+                ret = BadRequest(ConvertToModelState(vm.Messages));
             }
             else
             {

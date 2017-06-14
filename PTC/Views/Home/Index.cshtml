@@ -1,183 +1,195 @@
-﻿@model PTCViewModel
+﻿    
 
-@{
-  ViewBag.Title = "Paul's Training Company";
-}
-
-@using (Html.BeginForm()) { 
-    <div ng-app="app"
-         ng-controller="ProductController as vm">
-
-        <span>{{vm.product.ProductName}}</span>
-
-        <!-- ** BEGIN MESSAGE AREA ** -->
-        <div ng-hide="vm.uiState.isValid" class="row">
-            <div class="col-xs-12">
-                <div class="alert alert-danger
+<div ng-app="app"
+         ng-controller="ProductController as vm">        
+        <form name="productForm" novalidate>
+            <!-- ** BEGIN MESSAGE AREA ** -->
+            <div ng-hide="vm.uiState.isValid || (productForm.$valid && !productForm.$pristine)" class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-danger
                     alert-dismissable"
-                     role="alert">
-                    <button type="button" class="close"
-                            data-dismiss="alert">
-                        <span aria-hidden="true">
-                            &times;
-                        </span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <ul>
-                        <li ng-repeat="msg in vm.uiState.messages">
-                            {{msg.message}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- ** END MESSAGE AREA ** -->
-
-
-      
-        <!-- ** BEGIN SEARCH AREA ** -->
-        <div ng-show="vm.uiState.isSearchAreaVisible" class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class="panel-title">Search for Products</h1>
-            </div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label for="searchCategoryId"></label>
-                    <select id="searchCategoryId"
-                            class="form-control"
-                            ng-model="vm.searchInput.selectedCategory"
-                            ng-options="item.CategoryName for item in vm.searchCategories track by item.CategoryId"> 
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="searchProductName"></label>
-                    <input type="text" class="form-control"
-                           ng-model="vm.searchInput.productName" />
-                </div>
-            </div>
-            <div class="panel-footer">
-                <button type="button"
-                        class="btn btn-sm btn-primary"
-                        ng-click="vm.search()">
-                    <i class="glyphicon glyphicon-search"></i>
-                    &nbsp;Search
-                </button>
-                <button type="button"
-                        class="btn btn-sm btn-primary"
-                        ng-click="vm.resetSearch()">
-                    <i class="glyphicon glyphicon-share-alt"></i>
-                    &nbsp;Reset
-                </button>
-                <button type="button"
-                        class="btn btn-sm btn-success"
-                        ng-click="vm.addClick()">
-                    <i class="glyphicon glyphicon-heart"></i>
-                    &nbsp;Add
-                </button>
-            </div>
-        </div>
-        <!-- ** END SEARCH AREA ** -->
-
-        <!-- ** BEGIN DETAIL AREA ** -->
-        <div ng-show="vm.uiState.isDetailAreaVisible" class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class="panel-title">
-                    Product Information
-                </h1>
-            </div>
-            <div class="panel-body">
-                <!-- ** BEGIN INPUT AREA -->
-                <div class="form-group">
-                   <label for="categoryId">Category</label>
-                    <select id="categoryId"
-                            class="form-control"
-                            ng-model="vm.product.Category"
-                            ng-options="item.CategoryName for item in vm.categories track by item.CategoryId">
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productName">Product Name</label>
-                    <input id="productName" 
-                           type="text" 
-                           class="form-control"                           
-                           ng-model="vm.product.ProductName" />
-                </div>
-                <div class="form-group">
-                    <label for="introductionDate">
-                        Introduction Date
-                    </label>
-                    <input id="introductionDate"
-                           type="text"
-                           class="form-control"
-                           ng-model="vm.product.IntroductionDate" />                    
-                </div>
-                <div class="form-group">
-                    <label for="url">
-                        URL
-                    </label>
-                    <input id="url"
-                           type="url"
-                           class="form-control"
-                           ng-model="vm.product.Url" />
-                    
-                </div>
-                <div class="form-group">
-                    <label for="price">
-                        Price
-                    </label>
-                    <input id="price"
-                           type="number"
-                           class="form-control"
-                           ng-model="vm.product.Price" />                    
-                </div>
-                <!-- ** END INPUT AREA -->
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <button class="btn btn-sm btn-primary"
-                                type="button"
-                                ng-click="vm.saveClick()">
-                            <i class="glyphicon glyphicon-floppy-disk"></i>
-                            &nbsp;Save
+                         role="alert">
+                        <button type="button" class="close"
+                                data-dismiss="alert">
+                            <span aria-hidden="true">
+                                &times;
+                            </span>
+                            <span class="sr-only">Close</span>
                         </button>
-                        <button class="btn btn-sm btn-primary"
-                                type="button"
-                                ng-click="vm.cancelClick()">
-                            <i class="glyphicon glyphicon-remove-circle"></i>
-                            &nbsp;Cancel
-                        </button>
+                        <ul>
+                            <li ng-repeat="msg in vm.uiState.messages">
+                                {{msg.message}}
+                            </li>
+                            <li ng-show="productForm.productName.$error.required">
+                                Product name must be filled in.
+                            </li>
+                            <li ng-show="!productForm.productName.$valid">
+                                Product name must be between 4 and 150 characters
+                            </li>
+                            <li ng-show="!productForm.introductionDate.$valid">
+                                Introduction date must be filled in
+                            </li>
+                            <li ng-show="productForm.price.$error.required">
+                                Price must be filled in
+                            </li>
+                            <li ng-show="!productForm.price.$valid">
+                                Price must be between $0.1. and 9,999.99
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- ** END DETAIL AREA ** -->
+            <!-- ** END MESSAGE AREA ** -->
+            <!-- ** BEGIN SEARCH AREA ** -->
+            <div ng-show="vm.uiState.isSearchAreaVisible" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Search for Products</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="searchCategoryId"></label>
+                        <select id="searchCategoryId"
+                                class="form-control"
+                                ng-model="vm.searchInput.selectedCategory"
+                                ng-options="item.CategoryName for item in vm.searchCategories track by item.CategoryId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchProductName"></label>
+                        <input type="text" class="form-control"
+                               ng-model="vm.searchInput.productName" />
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button type="button"
+                            class="btn btn-sm btn-primary"
+                            ng-click="vm.search()">
+                        <i class="glyphicon glyphicon-search"></i>
+                        &nbsp;Search
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm btn-primary"
+                            ng-click="vm.resetSearch()">
+                        <i class="glyphicon glyphicon-share-alt"></i>
+                        &nbsp;Reset
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm btn-success"
+                            ng-click="vm.addClick()">
+                        <i class="glyphicon glyphicon-heart"></i>
+                        &nbsp;Add
+                    </button>
+                </div>
+            </div>
+            <!-- ** END SEARCH AREA ** -->
+            <!-- ** BEGIN DETAIL AREA ** -->
+            <div ng-show="vm.uiState.isDetailAreaVisible" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        Product Information
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    <!-- ** BEGIN INPUT AREA -->
+                    <div class="form-group">
+                        <label for="categoryId">Category</label>
+                        <select id="categoryId"
+                                class="form-control"
+                                ng-model="vm.product.Category"
+                                ng-options="item.CategoryName for item in vm.categories track by item.CategoryId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input id="productName"
+                               type="text"
+                               class="form-control"
+                               name="productName"
+                               required
+                               ng-minlength="4"
+                               ng-maxlength="150"
+                               ng-model="vm.product.ProductName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="introductionDate">
+                            Introduction Date
+                        </label>
+                        <input id="introductionDate"
+                               name="introductionDate"
+                               required
+                               type="text"
+                               class="form-control"
+                               ng-model="vm.product.IntroductionDate" />
+                    </div>
+                    <div class="form-group">
+                        <label for="url">
+                            URL
+                        </label>
+                        <input id="url"
+                               name="url"
+                               required
+                               type="url"
+                               class="form-control"
+                               ng-model="vm.product.Url" />
 
-        <!-- ** BEGIN LIST AREA ** -->
-        <div ng-show="vm.uiState.isListAreaVisible" class="table-responsive">
-            <table id="productTable"
-                   class="table table-condensed table-bordered table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th class="pdsa-action-button-column">
-                            Edit
-                        </th>
-                        <th>Product Name</th>
-                        <th>Introduction Date</th>
-                        <th>Url</th>
-                        <th>Price</th>
-                        <th class="pdsa-action-button-column">
-                            Delete
-                        </th>
-                    </tr>
-                </thead>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">
+                            Price
+                        </label>
+                        <input id="price"
+                               name="price"
+                               min="0.01"
+                               max="9999.99"
+                               type="number"
+                               class="form-control"
+                               ng-model="vm.product.Price" />
+                    </div>
+                    <!-- ** END INPUT AREA -->
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-sm btn-primary"
+                                    type="button"
+                                    ng-click="vm.saveClick(productForm)">
+                                <i class="glyphicon glyphicon-floppy-disk"></i>
+                                &nbsp;Save
+                            </button>
+                            <button class="btn btn-sm btn-primary"
+                                    type="button"
+                                    ng-click="vm.cancelClick(productForm)">
+                                <i class="glyphicon glyphicon-remove-circle"></i>
+                                &nbsp;Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ** END DETAIL AREA ** -->
+            <!-- ** BEGIN LIST AREA ** -->
+            <div ng-show="vm.uiState.isListAreaVisible" class="table-responsive">
+                <table id="productTable"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="pdsa-action-button-column">
+                                Edit
+                            </th>
+                            <th>Product Name</th>
+                            <th>Introduction Date</th>
+                            <th>Url</th>
+                            <th>Price</th>
+                            <th class="pdsa-action-button-column">
+                                Delete
+                            </th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                   
-                    
+                    <tbody>
+
+
                         <tr ng-repeat="product in vm.products | filter: vm.searchImmediate">
                             <td class="pdsa-action-button-column">
-                                <a href="#" 
+                                <a href="#"
                                    ng-click="vm.editClick(product.ProductId)"
                                    class="btn btn-default btn-sm">
                                     <i class="glyphicon glyphicon-edit"></i>
@@ -188,22 +200,22 @@
                             <td>{{product.Url}}</td>
                             <td>{{product.Price | currency: '$'}}</td>
                             <td class="pdsa-action-button-column">
-                                <a href="#" 
-                                   ng-click="vm.deleteClick(product.ProductId)"                                   
+                                <a href="#"
+                                   ng-click="vm.deleteClick(product.ProductId)"
                                    class="btn btn-default btn-sm">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </td>
 
                         </tr>
-                    
-                </tbody>
-            </table>
-        </div>
-        <!-- ** END LIST AREA ** -->
-        
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- ** END LIST AREA ** -->
+        </form>
     </div>
-}
+
 
 
 @section scripts {

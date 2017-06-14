@@ -57,12 +57,14 @@
         categoryList();
 
         function addClick() {
-            vm.product = initEntity();
-            debugger
+            vm.product = initEntity();           
             setUIState(pageMode.ADD)
         }
 
-        function cancelClick() {
+        function cancelClick(productForm) {
+            productForm.$setPristine();
+            productForm.$valid = true;
+            vm.uiState.isValid = true;
             setUIState(pageMode.LIST);
         }
 
@@ -77,15 +79,23 @@
             }
         }
 
-        function saveClick() {
-            if (validateData()) {
-                if (vm.uiState.mode == pageMode.ADD) {
-                    insertData();
+        function saveClick(productForm) {
+            if (productForm.$valid) {
+                if (validateData()) {
+                    productForm.$setPristine();
+                    if (vm.uiState.mode == pageMode.ADD) {
+                        insertData();
+                    } 
+                    else {
+                        updateData();
+                    }
                 }
-
                 else {
-                    updateData();
+                    productForm.$valid = false;
                 }
+            }
+            else {
+                vm.uiState.isValid = false;
             }
         }
 
@@ -129,6 +139,13 @@
             });
         }
 
+        function addValidationMessage(prop, msg) {
+            vm.uiState.messages.push({
+                property: prop,
+                message: msg
+            });
+        }
+
         function deleteData(id) {
             dataService.delete(
                 "/api/Product/" + id)
@@ -154,7 +171,23 @@
                 vm.product.IntroductionDate.
                     replace(/\u200E/g, '');
 
-            return ret;
+            vm.uiState.messages = [];
+
+            if (vm.product.IntroductionDate != null) {
+                if (isNaN(Date.parse(
+                    vm.product.IntroductionDate))) {
+                    addValidationMessage('IntroductionDate', 'Invalid Introduction Date');
+                }
+            }
+
+            if (vm.product.Url.
+                toLowerCase().indexOf("microsoft") >= 0) {
+                addValidationMessage('url', 'URL can not contain the word microsoft')
+            }
+
+            vm.uiState.isValid = (vm.uiState.messages.length == 0);
+
+            return vm.uiState.isValid;
         }
 
 
@@ -293,7 +326,17 @@
 
             switch (error.status) {
                 case 400:
+                    var errors = error.data.ModelState;
+                    debugger
+
+                    for (var key in errors) {
+                        for (var i = 0; i < errors[key].length; i++) {
+                            addValidationMessage(key, errors[key][i])
+                        }
+                    }
                     break;
+
+
 
                 case 404:
                     msg.message = 'The product you were ' +
