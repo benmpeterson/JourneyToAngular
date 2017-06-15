@@ -154,69 +154,70 @@ namespace PTC
     }
     #endregion
 
-    #region Search Method
-    public void Search() {
-      PTCEntities db = new PTCEntities();
+    
+    public void Search()
+        {
+            PTCEntities db = new PTCEntities();
 
-      // Perform Search
-      Products = db.Products.Where(p =>
-        (SearchEntity.CategoryId == 0 ? true :
-             p.Category.CategoryId == SearchEntity.CategoryId) &&
-        (string.IsNullOrEmpty(SearchEntity.ProductName) ? true :
-             p.ProductName.Contains(SearchEntity.ProductName))).
-        OrderBy(p => p.ProductName).ToList();
+            // Perform Search
+            GetProductMake(db);
 
-      SetUIState(PageConstants.LIST);
-    }
-        #endregion
-
-    public void SearchPriceAndMake()
-    {
-        PTCEntities db = new PTCEntities();
-
-        // Perform Search
-        Products = db.Products.Where(p =>
-            (SearchEntity.CategoryId == 0 ? true :
-                p.Category.CategoryId == SearchEntity.CategoryId) &&
-            (string.IsNullOrEmpty(SearchEntity.ProductName) ? true :
-                p.ProductName.Contains(SearchEntity.ProductName))).
-            OrderBy(p => p.ProductName).ToList();
-
-        ProductsMaxPrice = db.Products.Where(p =>
-            (SearchEntity.MaxPrice) >= (p.Price))
-            .OrderBy(p => p.Price).ToList();
-
-        ProductsMinPrice = db.Products.Where(p =>
-            (SearchEntity.MinPrice) <= (p.Price))
-            .OrderBy(p => p.Price).ToList();
-
-        SetUIState(PageConstants.LIST);
-    }
-
-        public void SearchPrice()
-    {
-        PTCEntities db = new PTCEntities();
-
-        ProductsMaxPrice = db.Products.Where(p =>        
-            (SearchEntity.MaxPrice) >= (p.Price))
-            .OrderBy(p => p.Price).ToList();
-
-        ProductsMinPrice = db.Products.Where(p =>
-        (SearchEntity.MinPrice) <= (p.Price))
-        .OrderBy(p => p.Price).ToList();
-
-
-        SetUIState(PageConstants.LIST);
+            SetUIState(PageConstants.LIST);
         }
 
+        public void SearchPrice()
+        {
+            PTCEntities db = new PTCEntities();
 
-        #region ResetSearch Method
+            GetMaxPrice(db);
+            GetMinPrice(db);
+
+
+            SetUIState(PageConstants.LIST);
+        }
+
+        public void SearchPriceAndMake()
+        {
+            PTCEntities db = new PTCEntities();
+
+            // Perform Search
+            GetProductMake(db);
+            GetMaxPrice(db);
+            GetMinPrice(db);
+
+            SetUIState(PageConstants.LIST);
+        }
+
+        private void GetProductMake(PTCEntities db)
+        {
+            Products = db.Products.Where(p =>
+                    (SearchEntity.CategoryId == 0 ? true :
+                         p.Category.CategoryId == SearchEntity.CategoryId) &&
+                    (string.IsNullOrEmpty(SearchEntity.ProductName) ? true :
+                         p.ProductName.Contains(SearchEntity.ProductName))).
+                    OrderBy(p => p.ProductName).ToList();
+        }
+
+        private void GetMinPrice(PTCEntities db)
+        {
+            ProductsMinPrice = db.Products.Where(p =>
+                            (SearchEntity.MinPrice) <= (p.Price))
+                            .OrderBy(p => p.Price).ToList();
+        }
+
+        private void GetMaxPrice(PTCEntities db)
+        {
+            ProductsMaxPrice = db.Products.Where(p =>
+                        (SearchEntity.MaxPrice) >= (p.Price))
+                        .OrderBy(p => p.Price).ToList();
+        }
+                
         public void ResetSearch() {
-      SearchEntity = new ProductSearch();
+        SearchEntity = new ProductSearch();
 
-      Get();
-    }
-    #endregion
+        Get();
+        }
+   
 
     #region AddMode Method
     public void AddMode() {
