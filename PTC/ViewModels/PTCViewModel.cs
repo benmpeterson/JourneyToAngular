@@ -129,7 +129,7 @@ namespace PTC
       // Add category for 'Search All'
       Category entity = new Category();
       entity.CategoryId = 0;
-      entity.CategoryName = "-- Search All Categories --";
+      entity.CategoryName = "-- Search All Makes --";
       SearchCategories.AddRange(Categories);
       // Insert "Search" at the top
       SearchCategories.Insert(0, entity);
