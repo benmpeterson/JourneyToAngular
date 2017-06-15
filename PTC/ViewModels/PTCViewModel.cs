@@ -18,6 +18,8 @@ namespace PTC
 
     #region Public Properties
     public List<Product> Products { get; set; }
+    public List<Product> ProductsMaxPrice { get; set; }
+    public List<Product> ProductsMinPrice { get; set; }
     public List<Category> Categories { get; set; }
     public ProductSearch SearchEntity { get; set; }
     public List<Category> SearchCategories { get; set; }
@@ -36,6 +38,8 @@ namespace PTC
     #region Init Method
     public void Init() {
       Products = new List<Product>();
+      ProductsMaxPrice = new List<Product>();
+      ProductsMaxPrice = new List<Product>();
       Categories = new List<Category>();
       Entity = new Product();
 
@@ -164,10 +168,50 @@ namespace PTC
 
       SetUIState(PageConstants.LIST);
     }
-    #endregion
+        #endregion
 
-    #region ResetSearch Method
-    public void ResetSearch() {
+    public void SearchPriceAndMake()
+    {
+        PTCEntities db = new PTCEntities();
+
+        // Perform Search
+        Products = db.Products.Where(p =>
+            (SearchEntity.CategoryId == 0 ? true :
+                p.Category.CategoryId == SearchEntity.CategoryId) &&
+            (string.IsNullOrEmpty(SearchEntity.ProductName) ? true :
+                p.ProductName.Contains(SearchEntity.ProductName))).
+            OrderBy(p => p.ProductName).ToList();
+
+        ProductsMaxPrice = db.Products.Where(p =>
+            (SearchEntity.MaxPrice) >= (p.Price))
+            .OrderBy(p => p.Price).ToList();
+
+        ProductsMinPrice = db.Products.Where(p =>
+            (SearchEntity.MinPrice) <= (p.Price))
+            .OrderBy(p => p.Price).ToList();
+
+        SetUIState(PageConstants.LIST);
+    }
+
+        public void SearchPrice()
+    {
+        PTCEntities db = new PTCEntities();
+
+        ProductsMaxPrice = db.Products.Where(p =>        
+            (SearchEntity.MaxPrice) >= (p.Price))
+            .OrderBy(p => p.Price).ToList();
+
+        ProductsMinPrice = db.Products.Where(p =>
+        (SearchEntity.MinPrice) <= (p.Price))
+        .OrderBy(p => p.Price).ToList();
+
+
+        SetUIState(PageConstants.LIST);
+        }
+
+
+        #region ResetSearch Method
+        public void ResetSearch() {
       SearchEntity = new ProductSearch();
 
       Get();

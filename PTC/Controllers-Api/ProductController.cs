@@ -6,12 +6,14 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using System.Web.OData;
 
 namespace PTC.Controllers_Api
 {
     public class ProductController : ApiController
     {
         // GET api/<controller>
+        [EnableQuery()]
         public IHttpActionResult Get()
         {
             IHttpActionResult ret = null;
@@ -22,7 +24,7 @@ namespace PTC.Controllers_Api
             vm.Get();            
             if(vm.Products.Count > 0)
             {
-                ret = Ok(vm.Products);
+                ret = Ok(vm.Products.AsQueryable());
             }
             else
             {
@@ -43,6 +45,61 @@ namespace PTC.Controllers_Api
             //Search for Products
             vm.SearchEntity = searchEntity;
             vm.Search();
+            if (vm.Products.Count > 0)
+            {
+                ret = Ok(vm.Products);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
+        [HttpPost()]
+        [Route("api/Product/SearchPrice")]
+
+        public IHttpActionResult SearchPrice(ProductSearch searchEntity)
+        {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            //Search for Products
+            vm.SearchEntity = searchEntity;
+            vm.SearchPrice();          
+
+            var priceRange = vm.ProductsMaxPrice.Intersect(vm.ProductsMinPrice);
+            vm.Products = priceRange.ToList();  
+            
+            if (vm.Products.Count > 0)
+            {
+                ret = Ok(vm.Products);
+            }
+            else
+            {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
+        [HttpPost()]
+        [Route("api/Product/SearchPriceAndMake")]
+
+        public IHttpActionResult SearchPriceAndMake(ProductSearch searchEntity)
+        {
+            IHttpActionResult ret = null;
+            PTCViewModel vm = new PTCViewModel();
+
+            //Search for Products
+            vm.SearchEntity = searchEntity;
+            vm.SearchPriceAndMake();
+
+            var priceRange = vm.ProductsMaxPrice.Intersect(vm.ProductsMinPrice);
+            var makeAndPriceRange = priceRange.Intersect(vm.Products);
+            vm.Products = makeAndPriceRange.ToList();
+
             if (vm.Products.Count > 0)
             {
                 ret = Ok(vm.Products);

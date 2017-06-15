@@ -26,9 +26,9 @@
                             <li ng-show="!productForm.productName.$valid">
                                 Product name must be between 4 and 150 characters
                             </li>
-                            <li ng-show="!productForm.introductionDate.$valid">
+                            @*<li ng-show="!productForm.introductionDate.$valid">
                                 Introduction date must be filled in
-                            </li>
+                            </li>*@
                             <li ng-show="productForm.price.$error.required">
                                 Price must be filled in
                             </li>
@@ -46,17 +46,32 @@
                     <h1 class="panel-title">Search for Products</h1>
                 </div>
                 <div class="panel-body">
-                    <div class="form-group">
+                    <div class="form-group col-md-6">
                         <label for="searchCategoryId"></label>
                         <select id="searchCategoryId"
                                 class="form-control"
                                 ng-model="vm.searchInput.selectedCategory"
                                 ng-options="item.CategoryName for item in vm.searchCategories track by item.CategoryId"></select>
                     </div>
-                    <div class="form-group">
-                        <label for="searchProductName"></label>
+
+                    <div class="form-group col-md-6">
+                        <label for="searchProductName">Min Price</label>
+                        <input type="text" class="form-control"
+                               ng-model="vm.searchInput.MinPrice" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="searchProductName">Search Product Name</label>
                         <input type="text" class="form-control"
                                ng-model="vm.searchInput.productName" />
+                    </div>
+
+                    
+
+                    <div class="form-group col-md-6">
+                        <label for="searchProductName">Search Max Price</label>
+                        <input type="text" class="form-control"
+                               ng-model="vm.searchInput.MaxPrice" />
                     </div>
                 </div>
                 <div class="panel-footer">
@@ -64,7 +79,19 @@
                             class="btn btn-sm btn-primary"
                             ng-click="vm.search()">
                         <i class="glyphicon glyphicon-search"></i>
-                        &nbsp;Search
+                        &nbsp;Make
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm btn-primary"
+                            ng-click="vm.searchPrice()">
+                        <i class="glyphicon glyphicon-search"></i>
+                        &nbsp;Price
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm btn-primary"
+                            ng-click="vm.searchPriceAndMake()">
+                        <i class="glyphicon glyphicon-search"></i>
+                        &nbsp;Price
                     </button>
                     <button type="button"
                             class="btn btn-sm btn-primary"
@@ -108,7 +135,7 @@
                                ng-maxlength="150"
                                ng-model="vm.product.ProductName" />
                     </div>
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <label for="introductionDate">
                             Introduction Date
                         </label>
@@ -118,7 +145,7 @@
                                type="text"
                                class="form-control"
                                ng-model="vm.product.IntroductionDate" />
-                    </div>
+                    </div>*@
                     <div class="form-group">
                         <label for="url">
                             URL
@@ -175,7 +202,7 @@
                                 Edit
                             </th>
                             <th>Product Name</th>
-                            <th>Introduction Date</th>
+                            @*<th>Introduction Date</th>*@
                             <th>Url</th>
                             <th>Price</th>
                             <th class="pdsa-action-button-column">
@@ -187,7 +214,7 @@
                     <tbody>
 
 
-                        <tr ng-repeat="product in vm.products | filter: vm.searchImmediate">
+                        <tr ng-repeat="product in vm.products">
                             <td class="pdsa-action-button-column">
                                 <a href="#"
                                    ng-click="vm.editClick(product.ProductId)"
@@ -196,7 +223,7 @@
                                 </a>
                             </td>
                             <td>{{product.ProductName}}</td>
-                            <td>{{product.IntroductioDate | date: 'MM/dd/yyyy'}}</td>
+                            @*<td>{{product.IntroductioDate | date: 'MM/dd/yyyy'}}</td>*@
                             <td>{{product.Url}}</td>
                             <td>{{product.Price | currency: '$'}}</td>
                             <td class="pdsa-action-button-column">

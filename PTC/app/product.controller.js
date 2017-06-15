@@ -11,6 +11,8 @@
         vm.resetSearch = resetSearch;
         vm.searchImmediate = searchImmediate;
         vm.search = search;
+        vm.searchPrice = searchPrice;
+        vm.searchPriceAndMake = searchPriceAndMake
         vm.addClick = addClick;
         vm.cancelClick = cancelClick;
         vm.editClick = editClick;
@@ -30,9 +32,11 @@
         vm.searchInput = {
             selectedCategory: {
                 CategoryId: 0,
-                CategoryName: ''
+                CategoryName: '',
             },
-            productName:''
+            productName: '',
+            MinPrice: '',
+            MaxPrice: '',
         };
 
 
@@ -261,6 +265,7 @@
                 vm.searchInput.productName
             };
 
+
             //Cal Web API to get a list of Products
             dataService.post("/api/Product/Search",
                 searchEntity)
@@ -272,13 +277,67 @@
                 });
         }
 
+
+        function searchPrice() {
+            //create object literal for search values
+            var searchEntity = {
+                CategoryId:
+                vm.searchInput.selectedCategory.CategoryId,
+                MaxPrice:
+                vm.searchInput.MaxPrice,               
+                MinPrice:
+                vm.searchInput.MinPrice
+                
+            };
+            
+
+            //Cal Web API to get a list of Products
+            dataService.post("/api/Product/SearchPrice",
+                searchEntity)
+                .then(function (result) {
+                    vm.products = result.data;
+                    setUIState(pageMode.LIST);
+                }, function (error) {
+                    handleException(error);
+                });
+        }
+
+        function searchPriceAndMake() {
+            //create object literal for search values
+            var searchEntity = {
+                CategoryId:
+                vm.searchInput.selectedCategory.CategoryId,
+                ProductName:
+                vm.searchInput.productName,
+                MaxPrice:
+                vm.searchInput.MaxPrice,
+                MinPrice:
+                vm.searchInput.MinPrice
+
+            };
+
+
+            //Cal Web API to get a list of Products
+            dataService.post("/api/Product/SearchPriceAndMake",
+                searchEntity)
+                .then(function (result) {
+                    vm.products = result.data;
+                    setUIState(pageMode.LIST);
+                }, function (error) {
+                    handleException(error);
+                });
+        }
+
+
         function searchImmediate(item) {
             if ((vm.searchInput.selectedCategory.CategoryId == 0 ? true : vm.searchInput.selectedCategory.CategoryId == item.Category.CategoryId) &&
-                (vm.searchInput.productName.length == 0 ? true : (item.ProductName.toLowerCase().indexOf(vm.searchInput.productName.toLowerCase()) >= 0))) {
-                //debugger;
-                return true;
-                
-            }
+                (vm.searchInput.productName.length == 0 ? true : (item.ProductName.toLowerCase().indexOf(vm.searchInput.productName.toLowerCase()) >= 0)) &&
+                (vm.searchInput.MinPrice == 0 ? true : (item.Price.indexOf(vm.searchInput.MinPrice) >= 0)))
+
+            {                
+                return true;                
+            }          
+
             //build
             //debugger;
             return false;
